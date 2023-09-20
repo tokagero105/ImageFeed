@@ -33,7 +33,6 @@ extension ImageListViewController: UITableViewDataSource {
         
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        print(photosName.count)
         return photosName.count
     }
     
@@ -54,13 +53,14 @@ extension ImageListViewController: UITableViewDataSource {
 
 extension ImageListViewController {
     func configCell(for cell: ImagesListCell, with indexPath: IndexPath) {
-        //print(photosName[indexPath.row])
         
         guard let image = UIImage(named: photosName[indexPath.row]) else {
             return
         }
         
         cell.cellImage.image = image
+        cell.cellImage.layer.cornerRadius = 16
+        cell.cellImage.layer.masksToBounds = true
         cell.dateLabel.text = dateFormatter.string(from: Date())
 
         let isLiked = indexPath.row % 2 == 0
