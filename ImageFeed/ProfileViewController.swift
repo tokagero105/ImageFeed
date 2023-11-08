@@ -54,6 +54,7 @@ extension ProfileViewController {
             target: self,
             action: #selector(self.didTapButton)
         )
+        logoutButton.tintColor = .ypRed
         view.addSubview(logoutButton)
         logoutButton.translatesAutoresizingMaskIntoConstraints = false
         logoutButton.centerYAnchor.constraint(equalTo: profileImageView.centerYAnchor).isActive = true
