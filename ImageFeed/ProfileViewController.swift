@@ -48,5 +48,21 @@ extension ProfileViewController {
         description.translatesAutoresizingMaskIntoConstraints = false
         description.topAnchor.constraint(equalTo: nickname.bottomAnchor, constant: 8).isActive = true
         description.leadingAnchor.constraint(equalTo: profileImageView.leadingAnchor).isActive = true
+        
+        let logoutButton = UIButton.systemButton(
+            with: UIImage(named: "logout_button 1")!,
+            target: self,
+            action: #selector(self.didTapButton)
+        )
+        view.addSubview(logoutButton)
+        logoutButton.translatesAutoresizingMaskIntoConstraints = false
+        logoutButton.centerYAnchor.constraint(equalTo: profileImageView.centerYAnchor).isActive = true
+        logoutButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20).isActive = true
+        
+    }
+    
+    @objc
+    private func didTapButton() {
+        //Do nothing
     }
 }
