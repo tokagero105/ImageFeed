@@ -11,6 +11,8 @@ import UIKit
 final class OAuth2Service {
     static let shared = OAuth2Service()
     private let urlSession = URLSession.shared
+    private var lastCode: String?
+    private var task: URLSessionTask?
 
     private (set) var authToken: String? {
         get {
@@ -22,6 +24,11 @@ final class OAuth2Service {
     }
     
     func fetchOAuthToken(_ code: String, completion: @escaping (Result<String, Error>) -> Void) {
+        assert(Thread.isMainThread)
+        if lastCode == code { return }
+        task?.cancel()
+        lastCode = code
+        
         let request = authTokenRequest(code: code)
         guard let request = request else { return }
         let task = object(for: request) { result in
@@ -34,6 +41,7 @@ final class OAuth2Service {
                 completion(.failure(error))
             }
         }
+        self.task = task
         task.resume()
     }
 }
@@ -55,11 +63,11 @@ extension URLRequest {
 
 extension OAuth2Service {
     private func object(
-        for reguest: URLRequest,
+        for request: URLRequest,
         comletion: @escaping (Result<OAuthTokenResponseBody, Error>) -> Void
     ) -> URLSessionTask {
         let decoder = JSONDecoder()
-        return urlSession.data(for: reguest) { (result: Result<Data, Error>) in
+        return urlSession.data(for: request) { (result: Result<Data, Error>) in
             let response = result.flatMap { data -> Result<OAuthTokenResponseBody, Error> in
                 Result { try decoder.decode(OAuthTokenResponseBody.self, from: data)}
             }
